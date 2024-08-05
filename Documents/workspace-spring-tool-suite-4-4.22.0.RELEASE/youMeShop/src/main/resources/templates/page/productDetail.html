@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/productDetail.css">
+</head>
+
+<body>
+	<div th:replace="fragments/nav :: nav"></div>
+  <div class="container mt-5">
+    <div class="product-details">
+    <div class="row">
+        <div class="col-md-6">
+            <img class="w-100 h-100" th:src="@{'/images/' + ${detailProd.getImageUrl}}" alt="Image">
+        </div>
+        <div class="col-md-6">
+            <h1 class="product-name" th:text="${detailProd.nameProduct}"></h1>
+            <p class="product-price"
+                th:text="${#numbers.formatDecimal(detailProd.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></p>
+            <form th:action="@{/cart/add}" method="post">
+                <input type="hidden" name="productId" th:value="${detailProd.idProduct}"/>
+                <div class="product-color">
+                    <span>Màu:</span>
+                    <div class="options">
+                        <div th:each="color : ${colors}" class="option-item">
+                            <label><input type="radio" name="color"
+                                th:value="${color.nameColor}" th:text="${color.nameColor}" required>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-size">
+                    <span>Size:</span>
+                    <div class="options">
+                        <div th:each="size : ${sizes}" class="option-item">
+                            <label><input type="radio" name="size"
+                                th:value="${size.nameSize}" th:text="${size.nameSize}" required>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-quantity">
+                            <button type="button" class="btn btn-info" onclick="updateQuantity(-1)">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1">
+                            <button type="button" class="btn btn-info" onclick="updateQuantity(1)">+</button>
+                        </div>
+                <p class="product-details" th:text="${detailProd.describe}"></p>
+                <button type="submit" class="btn btn-primary add-to-cart-btn">Thêm vào giỏ hàng</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div class="product-images mt-5">
+        <h2>Hình ảnh khác của sản phẩm</h2>
+        <div class="row">
+            <div class="col-3" th:each="pro :${listProduct}">
+                <a th:href="@{/DetailProduct/{id}(id=${pro.getIdProduct})}"><img class="w-100 h-100" th:src="@{'/images/' + ${pro.getImageUrl}}" alt="Image"></a>
+            </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.8.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+	<script>
+        function updateQuantity(amount) {
+            var quantityInput = document.getElementById('quantity');
+            var currentQuantity = parseInt(quantityInput.value);
+            var newQuantity = currentQuantity + amount;
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+            quantityInput.value = newQuantity;
+        }
+    </script>
+</html>

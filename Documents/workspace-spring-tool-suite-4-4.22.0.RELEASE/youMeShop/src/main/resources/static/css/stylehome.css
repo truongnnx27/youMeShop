@@ -1,0 +1,120 @@
+.fooder {
+    background-color: #0c0c0c;
+    color: #fff;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    height: 190px;
+  }
+
+  .navbar-expand-lg {
+    padding: 7px 0;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+  }
+
+  #navbarNav {
+    flex-grow: 1;
+  }
+
+  .navbar-nav.ml-auto {
+    margin-left: auto;
+  }
+
+  #nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  #nav-right .search {
+    margin-right: 10px;
+  }
+
+  .nav-item {
+    margin-left: 10px;
+  }
+
+  .logo {
+    margin-top: -5px;
+    width: 50px;
+    height: 45px;
+  }
+  .cart-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .item-count-header {
+    position: absolute;
+    top: -7px; /* Điều chỉnh vị trí dọc */
+    right: -8px; /* Điều chỉnh vị trí ngang */
+    color: rgb(241, 11, 11);
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1; /* Đảm bảo rằng thẻ span nằm trên cùng */
+  }
+  
+  .icon {
+    width: 24px; /* Điều chỉnh kích thước của biểu tượng nếu cần */
+    height: 24px;
+  }
+  
+
+  .card {
+    max-width: 290px;
+  }
+
+  .card-img-top {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card-buttons {
+    gap: 5px;
+  }
+
+  .card-body .btn {
+    margin-right: 30px;
+    margin-left: 5px;
+  }
+
+  .category {
+    max-width: 140px;
+    margin: 15px auto;
+    transition: transform 0.3s;
+  }
+
+  .category:hover {
+    transform: scale(1.3);
+    color: rgb(5, 228, 248);
+  }
+
+  .category img {
+    max-height: 150px;
+    object-fit: cover;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+  .category-title {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .category-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }

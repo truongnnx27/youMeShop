@@ -1,0 +1,138 @@
+ .navbar-expand-lg {
+        padding: 7px 0;
+        position: sticky;
+        top: 0;
+        z-index: 9;
+    }
+
+    #navbarNav {
+        flex-grow: 1;
+    }
+
+    .navbar-nav.ml-auto {
+        margin-left: auto;
+    }
+
+    #nav-right {
+        display: flex;
+        align-items: center;
+    }
+
+    #nav-right .search {
+        margin-right: 10px;
+    }
+
+    .nav-item {
+        margin-left: 10px;
+    }
+
+    .logo {
+        margin-top: -5px;
+        width: 50px;
+        height: 45px;
+    }
+
+    .cart-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .item-count-header {
+        position: absolute;
+        top: -7px; /* Điều chỉnh vị trí dọc */
+        right: -8px; /* Điều chỉnh vị trí ngang */
+        color: rgb(241, 11, 11);
+        border-radius: 50%;
+        padding: 2px 5px;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 1; /* Đảm bảo rằng thẻ span nằm trên cùng */
+    }
+
+    .icon {
+        width: 24px; /* Điều chỉnh kích thước của biểu tượng nếu cần */
+        height: 24px;
+    }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .product-name {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        color: #28a745;
+        margin-bottom: 1rem;
+    }
+
+    .product-color,
+    .product-size,
+    .product-details {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .add-to-cart-btn {
+        font-size: 1.2rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .product-images {
+        margin-top: 2rem;
+    }
+
+    .carousel-image {
+        height: auto;
+        object-fit: cover;
+        margin-bottom: 15px; /* Khoảng cách giữa các hình ảnh */
+    }
+
+    .product-quantity {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-quantity button {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        margin: 0;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .product-quantity input {
+        width: 60px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        height: 40px;
+        padding: 0;
+        margin: 0 5px;
+    }
+
+    .product-quantity button#decreaseQuantity {
+        border-radius: 4px 0 0 4px;
+    }
+
+    .product-quantity button#increaseQuantity {
+        border-radius: 0 4px 4px 0;
+    }
+
+    /* New styles for horizontal display of color and size options */
+    .product-color .options,
+    .product-size .options {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .product-color .options .option-item,
+    .product-size .options .option-item {
+        margin-right: 10px;
+        display: inline-block;
+    }

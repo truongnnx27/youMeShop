@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        header {
+            flex: 0 0 60px;
+            background-color: #04adf5;
+            color: white;
+        }
+        aside {
+            width: 250px;
+            background-color: #0dccf2;
+            color: white;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        article {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .nav-button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            font-size: 1.2em;
+        }
+        .nav-button.active {
+            background-color: #ef7008;
+        }
+        .hidden {
+            display: none;
+        }
+        .paid-status {
+			font-weight: bold;
+		    color: green;
+		}
+		
+		.unpaid-status {
+			font-weight: bold;
+		    color: red;
+		}
+    </style>
+</head>
+<body>
+    <header class="d-flex align-items-center justify-content-between px-3">
+        <h1 class="h3 mb-0">Admin Dashboard</h1>
+        <a class="btn btn-primary" href="/">Trang chủ</a>
+    </header>
+    <main>
+        <aside class="p-3 border-end">
+            <button class="btn btn-secondary nav-button active" onclick="showSection('stats')">
+                <i class="bi bi-bar-chart"></i> Thống kê sản phẩm theo danh mục
+            </button>
+             <button class="btn btn-secondary nav-button" onclick="showSection('order')">
+                <i class="bi bi-clipboard-check"></i> Quản lý chi tiết đơn hàng
+            </button>
+            <button class="btn btn-secondary nav-button" onclick="showSection('add')">
+                <i class="bi bi-plus-circle"></i> Thêm sản phẩm
+            </button>
+            <button class="btn btn-secondary nav-button" onclick="showSection('manage')">
+                <i class="bi bi-gear"></i> Quản lý sản phẩm
+            </button>
+        </aside>
+        <article>
+            <div id="stats">
+                <h2>Thống kê sản phẩm</h2>
+                <div class="row">
+                    <canvas id="categoryChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            
+            <div id="order" class="hidden">
+                <h2>Quản lý chi tiết đơn hàng</h2>
+                <label>Số lượng đơn hàng: <span class="text-danger" th:text="${totalOrderDetails}" style="font-weight: bold;"></span> </label>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID đơn hàng</th>
+                            <th>Người mua</th>
+                            <th>Ngày đặt hàng</th>
+                            <th>Tổng giá</th>
+                            <th>Trạng thái thanh toán</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="detail :${listOrderDetail}">
+                            <td th:text="${detail.idOrderDetails}"></td>
+                            <td th:text="${detail.user.fullname}"></td>
+                            <td th:text="${detail.orderDate}"></td>
+                            <td th:text="${#numbers.formatDecimal(detail.amount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                            <td th:classappend="${detail.isPaid} ? 'paid-status' : 'unpaid-status'" th:text="${detail.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}"></td>
+                            <td>
+			                    <a th:href="@{/admin/orderDetail/{id}(id=${detail.idOrderDetails})}" class="btn btn-info">Chi tiết đơn hàng</a>
+			                </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+		   <div id="add" class="hidden">
+			    <h2>Thêm sản phẩm</h2>
+			    <form action="" th:action="@{/admin/add}" method="post" th:object="${product}" enctype="multipart/form-data">
+			        <div class="mb-3">
+			            <label for="productName" class="form-label">Tên sản phẩm</label>
+			            <input type="text" class="form-control" id="nameProduct" placeholder="Tên sản phẩm" th:field="*{nameProduct}" required>
+			        </div>
+			        <div class="mb-3">
+			            <label for="productQuantity" class="form-label">Số lượng</label>
+			            <input type="number" class="form-control" id="quantity" placeholder="Số lượng" th:field="*{quantity}" required>
+			        </div>
+			        <div class="mb-3">
+			            <label for="Price" class="form-label">Giá</label>
+			            <input type="number" class="form-control" id="Price" placeholder="Số lượng" th:field="*{Price}" required>
+			        </div>
+			        <div class="mb-3">
+			            <label for="sizeNames" class="form-label">Size</label>
+			            <input type="text" class="form-control" id="sizeNames" placeholder="Nhập các size...." name="sizeNames" required>
+			        </div>
+			        <div class="mb-3">
+			            <label for="colorNames" class="form-label">Màu</label>
+			            <input type="text" class="form-control" id="colorNames" placeholder="Nhập các màu...." name="colorNames" required>
+			        </div>
+			        <div class="mb-3">
+			            <label for="productCategory" class="form-label">Danh mục sản phẩm</label>
+			            <select class="form-select" id="idCatalogue" name="idCatalogue" required>
+			                <option value="" disabled selected>Chọn danh mục</option>
+			                <option th:each="cate : ${categoryList}" th:value="${cate.idCatalogue}" th:text="${cate.nameCatalogue}"></option>
+			            </select>
+			        </div>
+			        <div class="mb-3">
+			            <label for="describe" class="form-label">Miêu tả sản phẩm</label>
+			            <textarea class="form-control" id="describe" placeholder="Miêu tả sản phẩm" th:field="*{describe}" required></textarea>
+			        </div>
+			        <div class="mb-3">
+			            <label for="productImage" class="form-label">Chọn ảnh</label>
+			            <input type="file" class="form-control" id="productImage" name="productImage" required>
+			        </div>
+			        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+			    </form>
+		</div>
+
+ 
+            <div id="manage" class="hidden">
+                <h2>Quản lý sản phẩm</h2>
+               <label>Số lượng sản phẩm: <span class="text-danger" th:text="${totalProduct}" style="font-weight: bold;"></span> </label>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Ảnh</th>
+                            <th>Size</th>
+                            <th>Màu</th>
+                            <th>Mô tả</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pro :${productList}">
+                            <td th:text="${pro.idProduct}"></td>
+                            <td th:text="${pro.nameProduct}"></td>
+                            <td th:text="${#numbers.formatDecimal(pro.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                            <td th:text="${pro.quantity}"></td>
+                            <td><img th:src="@{'/images/' + ${pro.imageUrl}}" alt="" style="width: 50px;"></td>
+						    <td>
+			                    <ul>
+			                        <li th:each="size : ${pro.sizes}" th:text="${size.nameSize}"></li>
+			                    </ul>
+						    </td>
+			                <td>
+			                    <ul>
+			                        <li th:each="color : ${pro.colors}" th:text="${color.nameColor}"></li>
+			                    </ul>
+			                </td>
+                            <td th:text="${pro.describe}"></td>
+                            <td>
+		                        <form th:action="@{'/admin/delete/' + ${pro.idProduct}}" method="get">
+		                            <button class="btn btn-danger" type="submit">
+		                                <i class="fas fa-trash-alt"></i>
+		                            </button>
+		                        </form>
+		                    </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </main>
+    
+    
+    <div th:replace="fragments/script :: script"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.js"></script>
+</body>
+</html>

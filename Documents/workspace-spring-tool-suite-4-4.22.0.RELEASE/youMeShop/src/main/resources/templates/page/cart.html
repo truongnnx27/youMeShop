@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/stylecart.css">
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="fragments/nav :: nav"></div>
+    <div class="container-fluid">
+        <h1>Danh sách sản phẩm</h1>
+        <div class="row">
+            <div class="col-md-9">
+                <div th:if="${emptyCart}">
+                    <h1 class="text-danger" style="margin-left: 590px">Giỏ hàng trống</h1>
+                    <img src="/images/cute.gif" alt="Giỏ hàng trống" class="img-fluid" style="margin-left: 460px">
+                </div>
+                <div th:unless="${emptyCart}">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên</th>
+                                <th>Hình ảnh</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Màu</th>
+                                <th>Size</th>
+                                <th>Tổng</th>
+                                <th>Trạng thái thanh toán</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${cart}">
+                                <td th:text="${item.idOrderDetails}"></td>
+                                <td th:text="${item.products.nameProduct}"></td>
+                                <td>
+                                    <img th:src="@{'/images/' + ${item.products.imageUrl}}" class="product-image" alt="...">
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                <td>
+                                    <form th:action="@{/cart/update}" method="post" th:if="${!item.isPaid}">
+                                        <input type="hidden" name="idOrderDetails" th:value="${item.idOrderDetails}">
+                                        <div class="product-quantity">
+                                            <button type="button" class="btn btn-info" onclick="updateQuantity(-1, this)">-</button>
+                                            <input type="number" id="quantity" name="quantity" th:value="${item.quantity}" min="1">
+                                            <button type="button" class="btn btn-info" onclick="updateQuantity(1, this)">+</button>
+                                        </div>
+                                    </form>
+                                    <span th:if="${item.isPaid}" th:text="${item.quantity}"></span>
+                                </td>
+                                <td th:text="${item.color}"></td>
+                                <td th:text="${item.size}"></td>
+                                <td th:text="${#numbers.formatDecimal(item.amount, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                                <td th:classappend="${item.isPaid} ? 'paid-status' : 'unpaid-status'" th:text="${item.isPaid ? 'đã thanh toán' : 'chưa thanh toán'}"></td>
+                                <td class="align-middle">
+                                    <form th:action="@{/cart/delete}" method="post">
+                                        <input type="hidden" name="productId" th:value="${item.products.idProduct}" />
+                                        <input type="hidden" name="color" th:value="${item.color}" />
+                                        <input type="hidden" name="size" th:value="${item.size}" />
+                                        <button class="btn btn-sm btn-danger" type="submit"
+                                                onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3" th:unless="${emptyCart}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Thông tin đơn hàng</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Tạm Tính: <span th:text="${#numbers.formatDecimal(subTotal, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                               Phí vận chuyển: <span th:text="${#numbers.formatDecimal(shippingFee, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                 Ngày mua: <span th:text="${orderDate}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Tổng: <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' VND'"></span>
+                            </li>
+                        </ul>
+                        <form th:action="@{/cart/checkout}" method="post">
+                            <button class="btn btn-primary mt-3" type="submit">Thanh toán đơn hàng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.8.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function updateQuantity(amount, button) {
+            var form = button.closest('form');
+            var quantityInput = form.querySelector('input[name="quantity"]');
+            var currentQuantity = parseInt(quantityInput.value);
+            var newQuantity = currentQuantity + amount;
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+            quantityInput.value = newQuantity;
+            form.submit();
+        }
+    </script>
+</body>
+</html>

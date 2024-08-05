@@ -1,0 +1,47 @@
+<!-- orderDetail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết đơn hàng</title>
+    <!-- Thêm các thư viện CSS/JS cần thiết -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<style >
+		.paid-status {
+			font-weight: bold;
+		    color: green;
+		}
+		
+		.unpaid-status {
+			font-weight: bold;
+		    color: red;
+		}
+	</style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Chi tiết đơn hàng</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID đơn hàng</th>
+                    <th>Người mua</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Tổng giá</th>
+                    <th>Trạng thái thanh toán</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${orderDetail.idOrderDetails}"></td>
+                    <td th:text="${orderDetail.user.fullname}"></td>
+                    <td th:text="${orderDetail.products.nameProduct}"></td>
+                    <td th:text="${#dates.format(orderDetail.orderDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#numbers.formatDecimal(orderDetail.order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                    <td th:classappend="${orderDetail.isPaid} ? 'paid-status' : 'unpaid-status'" th:text="${orderDetail.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

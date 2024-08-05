@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+
+<head th:replace="fragments/header :: header"></head>
+
+<body>
+<!-- Navbar Start -->
+<div th:replace="fragments/nav :: nav"></div>
+
+<!-- Navbar End -->
+
+
+<div class="container-fluid mt-4">
+    <h2 class="category-title">Danh mục sản phẩm</h2>
+    <div class="row category-container">
+      <div class="col-6 col-sm-4 col-md-2" th:each="cate: ${categoryList}">
+        <div class="category">
+          <a th:href="@{/category/{id}(id=${cate.getIdCatalogue})}">
+            <img th:src="@{'/images/'+${cate.image}}"  class="card-img-top" alt="Sản phẩm 1">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title" th:text="${cate.nameCatalogue}"></h5>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-6 col-sm-4 col-md-2 d-none d-md-block"></div>
+      <div class="col-6 col-sm-4 col-md-2 d-none d-md-block"></div>
+      <div class="col-6 col-sm-4 col-md-2 d-none d-md-block"></div>
+      <div class="col-6 col-sm-4 col-md-2 d-none d-md-block"></div>
+      <div class="col-6 col-sm-4 col-md-2 d-none d-md-block"></div>
+    </div>
+  </div>
+  
+  <hr>
+  <h1>Sản phẩm bán chạy</h1>
+  <div class="row">
+    <div class="col-md-3 mb-4" th:each="pro: ${productList}">
+      <div class="card">
+        <img th:src="@{'/images/' + ${pro.imageUrl}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${pro.nameProduct}"></h5>
+          <h5 class="card-title text-danger" th:text="${#numbers.formatDecimal(pro.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></h5>
+          <p class="card-text" th:text="${pro.describe}"></p>
+          <div class="d-flex justify-content-between align-items-center card-buttons">
+            <a th:href="@{/DetailProduct/{id}(id=${pro.getIdProduct})}" class="btn btn-primary">Xem chi tiết</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Repeat similar blocks for other products -->
+  </div>
+
+
+
+</body>
+</html>

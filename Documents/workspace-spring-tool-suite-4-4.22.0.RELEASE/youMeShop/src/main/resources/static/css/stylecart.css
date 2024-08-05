@@ -1,0 +1,102 @@
+.navbar-expand-lg{
+    padding: 7px 0;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+
+}
+#navbarNav {
+  flex-grow: 1;
+}
+
+.navbar-nav.ml-auto {
+  margin-left: auto;
+}
+
+#nav-right {
+  display: flex;
+  align-items: center;
+}
+
+#nav-right .search {
+  margin-right: 10px;
+}
+.nav-item{
+  margin-left: 10px;
+}
+.cart-container {
+  position: relative;
+  display: inline-block;
+}
+
+.item-count-header {
+  position: absolute;
+  top: -7px; /* Điều chỉnh vị trí dọc */
+  right: -8px; /* Điều chỉnh vị trí ngang */
+  color: rgb(241, 11, 11);
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1; /* Đảm bảo rằng thẻ span nằm trên cùng */
+}
+
+.icon {
+  width: 24px; /* Điều chỉnh kích thước của biểu tượng nếu cần */
+  height: 24px;
+}
+
+.logo
+{
+  margin-top: -5px;
+  width: 50px;
+  height: 45px;
+}
+h1{
+    color: rgb(21, 116, 116);
+}
+.product-image {
+    width: 100px; /* Chiều rộng cố định */
+    height: 100px; /* Chiều cao cố định */
+    object-fit: cover; /* Đảm bảo hình ảnh được bao phủ toàn bộ khung */
+}
+
+.product-quantity {
+    display: flex;
+    align-items: center;
+}
+
+.product-quantity button {
+    flex: 0 0 auto;
+    margin: 0;
+    height: 100%; 
+}
+
+.product-quantity input {
+    flex: 1;
+    text-align: center;
+    max-width: 60px;
+    height: 38px; /* Chiều cao của input */
+    margin: 0;
+}
+
+.product-quantity button:first-of-type {
+    border-radius: 0.25rem 0 0 0.25rem; /* Bo góc nút trái nếu cần */
+}
+
+.product-quantity button:last-of-type {
+    border-radius: 0 0.25rem 0.25rem 0; /* Bo góc nút phải nếu cần */
+}
+
+.paid-status {
+	font-weight: bold;
+    color: green;
+}
+
+.unpaid-status {
+	font-weight: bold;
+    color: red;
+}
+
+
+
