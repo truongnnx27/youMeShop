@@ -90,15 +90,15 @@ public class AdminController {
         	try {
 				//đường dẫn lưu trữ file
         		String fileName= productImage.getOriginalFilename();
-        		String uploadDir= "";
+        		String uploadDir= "src/main/resources/static/images";
         		
         		//tạo thư mục nếu chưa có
         		FileUploadUtil.saveFile(uploadDir, fileName, productImage);
         		
         		//thiết lập đường dẫn
-        		product.setImageUrl(uploadDir + fileName);
+        		product.setImageUrl(fileName);
         		
-			} catch (IOException e) {
+			} catch (IOException e) {        
 				e.printStackTrace();
 				model.addAttribute("message","tải ảnh không thành công!");
 				return "admin/admin";
